@@ -1,12 +1,8 @@
-Here’s a rewritten, clean version with **Lovable removed** and updated to **React + Next.js**:
-
----
-
 # Welcome to the Project
 
 ## Project Info
 
-**URL**: [https://your-project-url.com](https://your-project-url.com)
+**URL**: [https://loadify.online/](https://loadify.online/)
 
 ## How can I edit this project?
 
