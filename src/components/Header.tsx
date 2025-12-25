@@ -10,23 +10,7 @@ const Header = () => {
       <nav className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
-            <svg
-              width="32"
-              height="32"
-              viewBox="0 0 32 32"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              className="text-foreground"
-            >
-              <path
-                d="M8 4L8 28M8 16L24 8L24 24L8 16Z"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            <span className="text-xl font-semibold tracking-tight">Loadify</span>
+            <img src="/logo.png" alt="Loadify" className="brand-logo" />
           </Link>
 
           <div className="flex items-center gap-6">

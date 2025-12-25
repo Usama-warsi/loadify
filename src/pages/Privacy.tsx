@@ -9,7 +9,7 @@ const Privacy = () => {
       <main className="flex-1 pt-24 pb-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <div className="neumorphic rounded-2xl p-8 md:p-12 space-y-8">
+            <div className="neumorphic rounded-2xl p-8 md:p-12 space-y-8 privacy-terms-content">
               <h1 className="text-4xl md:text-5xl font-bold">Privacy Policy</h1>
               
               <div className="space-y-6 text-muted-foreground">

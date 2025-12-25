@@ -139,3 +139,13 @@ audio::-moz-range-progress {
   border-radius: 8px;
 }
 
+.brand-logo {
+  max-width: 80px !important;
+  height: auto;
+}
+
+/* Left align text for Privacy and Terms pages */
+.privacy-terms-content {
+  text-align: left;
+}
+
