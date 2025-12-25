@@ -1,6 +1,6 @@
 # Welcome to the Project
 
-## Project Info 
+## Project Info
 
 **URL**: [https://loadify.online/](https://loadify.online/)
 
