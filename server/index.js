@@ -65,40 +65,42 @@ app.post('/api/contact', async (req, res) => {
     }
   }
 
-  // WordPress API Configuration
-  const wpUrl = "https://codrammer.com/wp-json/wp/v2/loadify-contact-form";
-  const WP_USERNAME = process.env.WP_USERNAME;
-  const WP_APP_PASSWORD = process.env.WP_APP_PASSWORD;
-  if (!WP_USERNAME || !WP_APP_PASSWORD) {
-    console.error('WP_USERNAME / WP_APP_PASSWORD are not configured');
+  const SLACK_WEBHOOK_URL = process.env.SLACK_WEBHOOK_URL;
+  if (!SLACK_WEBHOOK_URL) {
+    console.error('SLACK_WEBHOOK_URL is not configured');
     return res.status(500).json({ error: 'Contact form is not configured' });
   }
-  const auth = Buffer.from(`${WP_USERNAME}:${WP_APP_PASSWORD}`).toString('base64');
 
   try {
-    const wpBody = {
-      title: name,
-      status: "publish",
-      acf: {
-        name,
-        email,
-        phone: phone || "",
-        message
-      }
+    const slackBody = {
+      blocks: [
+        {
+          type: 'header',
+          text: { type: 'plain_text', text: 'New Loadify Contact Form Submission' },
+        },
+        {
+          type: 'section',
+          fields: [
+            { type: 'mrkdwn', text: `*Name:*\n${name}` },
+            { type: 'mrkdwn', text: `*Email:*\n${email}` },
+            { type: 'mrkdwn', text: `*Phone:*\n${phone || '-'}` },
+          ],
+        },
+        {
+          type: 'section',
+          text: { type: 'mrkdwn', text: `*Message:*\n${message}` },
+        },
+      ],
     };
 
-    const wpRes = await axios.post(wpUrl, wpBody, {
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Basic ${auth}`
-      }
+    await axios.post(SLACK_WEBHOOK_URL, slackBody, {
+      headers: { 'Content-Type': 'application/json' },
     });
 
-    console.log('WP API Success:', wpRes.data.id);
-    return res.json({ ok: true, id: wpRes.data.id });
+    return res.json({ ok: true });
   } catch (err) {
-    console.error('WP API Error', err?.response?.data || err.message);
-    return res.status(500).json({ error: 'Failed to save contact to WP', details: err?.response?.data });
+    console.error('Slack webhook error', err?.response?.data || err.message);
+    return res.status(500).json({ error: 'Failed to send message' });
   }
 });
 

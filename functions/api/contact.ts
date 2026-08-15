@@ -11,51 +11,52 @@ export const onRequestPost = async (context) => {
         }
 
         // TODO: Verify captchaToken
-        // TODO: Send email using a provider (e.g. Resend, SendGrid) API
 
-        // WordPress API Configuration
-        const wpUrl = "https://codrammer.com/wp-json/wp/v2/loadify-contact-form";
-        const wpUsername = env.WP_USERNAME;
-        const wpAppPassword = env.WP_APP_PASSWORD;
-        if (!wpUsername || !wpAppPassword) {
+        const slackWebhookUrl = env.SLACK_WEBHOOK_URL;
+        if (!slackWebhookUrl) {
             return new Response(JSON.stringify({ error: "Contact form is not configured" }), {
                 status: 500,
                 headers: { "Content-Type": "application/json" },
             });
         }
-        const auth = btoa(`${wpUsername}:${wpAppPassword}`);
 
-        const wpBody = {
-            title: name,
-            status: "publish",
-            acf: {
-                name,
-                email,
-                phone,
-                message
-            }
+        const slackBody = {
+            blocks: [
+                {
+                    type: "header",
+                    text: { type: "plain_text", text: "New Loadify Contact Form Submission" },
+                },
+                {
+                    type: "section",
+                    fields: [
+                        { type: "mrkdwn", text: `*Name:*\n${name}` },
+                        { type: "mrkdwn", text: `*Email:*\n${email}` },
+                        { type: "mrkdwn", text: `*Phone:*\n${phone || "-"}` },
+                    ],
+                },
+                {
+                    type: "section",
+                    text: { type: "mrkdwn", text: `*Message:*\n${message}` },
+                },
+            ],
         };
 
-        const wpRes = await fetch(wpUrl, {
+        const slackRes = await fetch(slackWebhookUrl, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Basic ${auth}`
-            },
-            body: JSON.stringify(wpBody)
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(slackBody),
         });
 
-        if (!wpRes.ok) {
-            const errorText = await wpRes.text();
-            console.error("WP API Error:", errorText);
-            return new Response(JSON.stringify({ error: "Failed to save contact", details: errorText }), {
+        if (!slackRes.ok) {
+            const errorText = await slackRes.text();
+            console.error("Slack webhook error:", errorText);
+            return new Response(JSON.stringify({ error: "Failed to send message" }), {
                 status: 500,
                 headers: { "Content-Type": "application/json" },
             });
         }
 
-        const wpData = await wpRes.json();
-        return new Response(JSON.stringify({ success: true, data: wpData }), {
+        return new Response(JSON.stringify({ success: true }), {
             status: 200,
             headers: { "Content-Type": "application/json" },
         });
