@@ -29,6 +29,13 @@ const VideoDownloadForm = () => {
       return;
     }
 
+    // GTM Event: download_submit_clicked
+    if (window.dataLayer) {
+      window.dataLayer.push({
+        event: 'download_submit_clicked'
+      });
+    }
+
     setLoading(true);
     // start progress animation
     setProgress(5);
@@ -45,10 +52,10 @@ const VideoDownloadForm = () => {
     setResult(null);
 
     try {
-      const response = await fetch("https://downloader.seositechecker.pro/api/download", {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/download/`, {
         method: "POST",
         headers: {
-          Authorization: "Bearer c42b70c65f64e53088baac5f85a78bbf27743d1c",
+          Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
           Accept: "application/json",
           "Content-Type": "application/json",
         },
@@ -131,6 +138,14 @@ const VideoDownloadForm = () => {
                 placeholder="Paste video URL here"
                 className="w-full px-6 py-4 rounded-xl neumorphic-inset bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                 disabled={loading}
+                onBlur={(e) => {
+                  if (e.target.value.trim() && window.dataLayer) {
+                    window.dataLayer.push({
+                      event: 'video_url_entered',
+                      video_url: e.target.value
+                    });
+                  }
+                }}
               />
             </div>
 
@@ -148,9 +163,8 @@ const VideoDownloadForm = () => {
                 type="button"
                 onClick={() => setMp3(!mp3)}
                 aria-pressed={mp3}
-                className={`neumorphic-flat w-6 h-6 rounded-md transition-all ${
-                  mp3 ? "bg-primary" : ""
-                }`}
+                className={`neumorphic-flat w-6 h-6 rounded-md transition-all ${mp3 ? "bg-primary" : ""
+                  }`}
                 disabled={loading}
               >
                 {mp3 && (

@@ -1,1 +1,14 @@
 /// <reference types="vite/client" />
+
+interface Window {
+    dataLayer: any[];
+}
+
+interface ImportMetaEnv {
+    readonly VITE_API_BASE_URL: string;
+    readonly VITE_API_TOKEN: string;
+}
+
+interface ImportMeta {
+    readonly env: ImportMetaEnv;
+}

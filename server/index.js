@@ -65,37 +65,40 @@ app.post('/api/contact', async (req, res) => {
     }
   }
 
-  // Prepare transporter
-  const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST || 'smtp.gmail.com',
-    port: process.env.SMTP_PORT ? Number(process.env.SMTP_PORT) : 587,
-    secure: false,
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
-    },
-  });
-
-  const toAddress = process.env.CONTACT_TO;
-  if (!toAddress) {
-    console.error('No CONTACT_TO configured');
-    return res.status(500).json({ error: 'Server not configured' });
+  // WordPress API Configuration
+  const wpUrl = "https://codrammer.com/wp-json/wp/v2/loadify-contact-form";
+  const WP_USERNAME = process.env.WP_USERNAME;
+  const WP_APP_PASSWORD = process.env.WP_APP_PASSWORD;
+  if (!WP_USERNAME || !WP_APP_PASSWORD) {
+    console.error('WP_USERNAME / WP_APP_PASSWORD are not configured');
+    return res.status(500).json({ error: 'Contact form is not configured' });
   }
+  const auth = Buffer.from(`${WP_USERNAME}:${WP_APP_PASSWORD}`).toString('base64');
 
   try {
-    const info = await transporter.sendMail({
-      from: process.env.SMTP_USER,
-      to: toAddress,
-      subject: `Contact form: ${name}`,
-      text: `Name: ${name}\nEmail: ${email}\nPhone: ${phone || '-'}\n\n${message}`,
-      html: `<p><strong>Name:</strong> ${name}</p><p><strong>Email:</strong> ${email}</p><p><strong>Phone:</strong> ${phone || '-'}</p><hr/><p>${message}</p>`,
+    const wpBody = {
+      title: name,
+      status: "publish",
+      acf: {
+        name,
+        email,
+        phone: phone || "",
+        message
+      }
+    };
+
+    const wpRes = await axios.post(wpUrl, wpBody, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Basic ${auth}`
+      }
     });
 
-    console.log('Email sent:', info.messageId);
-    return res.json({ ok: true });
+    console.log('WP API Success:', wpRes.data.id);
+    return res.json({ ok: true, id: wpRes.data.id });
   } catch (err) {
-    console.error('Send email error', err);
-    return res.status(500).json({ error: 'Failed to send email' });
+    console.error('WP API Error', err?.response?.data || err.message);
+    return res.status(500).json({ error: 'Failed to save contact to WP', details: err?.response?.data });
   }
 });
 

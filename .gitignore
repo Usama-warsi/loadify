@@ -11,6 +11,12 @@ node_modules
 dist
 dist-ssr
 *.local
+.env
+.env.local
+.wrangler
+
+# Django backend lives in its own separate repo (loadify-backend)
+backend
 
 # Editor directories and files
 .vscode/*

@@ -42,102 +42,67 @@
 }
 
 /* Modern Custom Audio Player */
-audio {
+/* Modern Custom Audio Player */
+.modern-audio-player {
   width: 100%;
-  height: 50px;
-  border-radius: 12px;
-  appearance: none;
-  -webkit-appearance: none;
-  background: linear-gradient(135deg, hsl(var(--muted)) 0%, hsl(var(--accent)) 100%);
+  height: 54px;
+  border-radius: 27px; /* Full pill shape */
   outline: none;
   cursor: pointer;
-  padding: 8px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  margin: auto;
+  box-shadow: 
+    inset 4px 4px 8px hsl(var(--shadow-dark)),
+    inset -4px -4px 8px hsl(var(--shadow-light));
+  background-color: hsl(var(--background));
 }
 
 /* Webkit browsers (Chrome, Safari) */
-audio::-webkit-media-controls-panel {
+.modern-audio-player::-webkit-media-controls-panel {
   background-color: transparent;
+  padding: 0 16px; 
 }
 
-audio::-webkit-media-controls-play-button,
-audio::-webkit-media-controls-mute-button {
+.modern-audio-player::-webkit-media-controls-play-button,
+.modern-audio-player::-webkit-media-controls-mute-button {
   background-color: hsl(var(--primary));
   border-radius: 50%;
   color: hsl(var(--primary-foreground));
   cursor: pointer;
-  padding: 6px;
+  width: 32px;
+  height: 32px;
   transition: all 0.2s ease;
+  opacity: 0.9;
 }
 
-audio::-webkit-media-controls-play-button:hover,
-audio::-webkit-media-controls-mute-button:hover {
+.modern-audio-player::-webkit-media-controls-play-button:hover,
+.modern-audio-player::-webkit-media-controls-mute-button:hover {
   background-color: hsl(var(--foreground));
-  transform: scale(1.1);
+  transform: scale(1.05);
+  opacity: 1;
 }
 
-audio::-webkit-media-controls-timeline {
-  background-color: hsl(var(--muted));
-  border-radius: 8px;
-  height: 6px;
+.modern-audio-player::-webkit-media-controls-timeline {
+  background-color: transparent !important;
+  margin: 0 16px;
 }
 
-audio::-webkit-media-slider-thumb {
-  appearance: none;
-  -webkit-appearance: none;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: hsl(var(--primary));
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  transition: all 0.2s ease;
-}
-
-audio::-webkit-media-slider-thumb:hover {
-  transform: scale(1.3);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-audio::-webkit-media-controls-time-remaining-display,
-audio::-webkit-media-controls-current-time-display {
+.modern-audio-player::-webkit-media-controls-current-time-display,
+.modern-audio-player::-webkit-media-controls-time-remaining-display {
   color: hsl(var(--foreground));
-  font-size: 12px;
+  font-family: inherit;
+  font-size: 13px;
   font-weight: 500;
+  text-shadow: none;
 }
 
-audio::-webkit-media-controls-volume-slider {
-  width: 60px;
-  cursor: pointer;
+.modern-audio-player::-webkit-media-controls-volume-slider {
+  padding-left: 8px;
 }
 
-/* Firefox */
-audio::-moz-range-thumb {
-  background: hsl(var(--primary));
-  border-radius: 50%;
-  border: none;
-  cursor: pointer;
-  width: 14px;
-  height: 14px;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+.modern-audio-player::-webkit-media-controls-enclosure {
+  background: transparent !important;
+  border-radius: 0;
 }
 
-audio::-moz-range-thumb:hover {
-  transform: scale(1.3);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-audio::-moz-range-track {
-  background: hsl(var(--muted));
-  border-radius: 8px;
-}
-
-audio::-moz-range-progress {
-  background: hsl(var(--primary));
-  border-radius: 8px;
-}
 
 .brand-logo {
   max-width: 80px !important;

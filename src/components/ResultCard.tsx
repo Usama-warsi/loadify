@@ -71,6 +71,13 @@ const ResultCard = ({ result, mp3, onReset }: ResultCardProps) => {
                 download
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => {
+                  if (window.dataLayer) {
+                    window.dataLayer.push({
+                      event: 'download_completed'
+                    });
+                  }
+                }}
                 className="flex-1 w-full md:w-auto neumorphic rounded-xl px-6 py-4 font-semibold text-foreground hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
               >
                 <Download className="w-5 h-5" />

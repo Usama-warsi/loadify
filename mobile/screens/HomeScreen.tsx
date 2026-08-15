@@ -5,8 +5,8 @@ import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import axios from 'axios';
 
-const API_ENDPOINT = 'https://downloader.seositechecker.pro/api/download';
-const AUTH_TOKEN = 'Bearer c42b70c65f64e53088baac5f85a78bbf27743d1c';
+const API_ENDPOINT = 'https://api.loadify.online/api/download/';
+const AUTH_TOKEN = 'Bearer REPLACE_WITH_API_TOKEN';
 
 export default function HomeScreen({ navigation }: any) {
   const [url, setUrl] = useState('');
